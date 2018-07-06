@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Spring Thyme Seed Starter Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" media="all" href="../../css/stsm.css" th:href="@{/css/stsm.css}"/>
+</head>
+
+<body>
+
+<div>
+    <img src="../../images/stsmlogo.png" alt="STSM logo" title="STSM logo"
+         th:src="@{/images/stsmlogo.png}" th:alt-title="#{title.application}"/>
+</div>
+<div>
+    <h2>Spring Rest Template Test</h2>
+    <div>
+        <b>Spring Async Annotation GET Result:</b>
+        <br>
+        <h5 th:text="${springasync}"></h5>
+    </div>
+    <div>
+        <b>POST Result:</b>
+        <br>
+        <h5 th:text="${postres}"></h5>
+    </div>
+    <div>
+        <b>Sync Rest Template Quote GET Result:</b>
+        <br>
+        <h5 th:text="${syncquotetype}"></h5>
+        <h5 th:text="${syncquoteval}"></h5>
+    </div>
+    <div>
+        <b>Async Rest Template Quote GET Result:</b>
+        <br>
+        <h5 th:text="${asyncquotetype}"></h5>
+        <h5 th:text="${asyncquoteval}"></h5>
+    </div>
+</div>
+
+</body>
+</html>
