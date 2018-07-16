@@ -50,14 +50,17 @@ import thymeleafexamples.stsm.business.services.GitHubLookupService;
 public class SeedStarterMngController {
     final Log logger = LogFactory.getLog(getClass());
     RestTemplate restTemplate = new RestTemplate();
-    AsyncRestTemplate asyncTemplate = new AsyncRestTemplate(new HttpComponentsAsyncClientHttpRequestFactory());
+    RestTemplate normalRT = new RestTemplate();
+     AsyncRestTemplate asyncTemplate = new AsyncRestTemplate(new HttpComponentsAsyncClientHttpRequestFactory());
 
     @Autowired
     private GitHubLookupService gitHubLookupService;
 
     public SeedStarterMngController() {
         super();
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        // uncomment to apache HTTP request factory
+        // restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        ((SimpleClientHttpRequestFactory)this.restTemplate.getRequestFactory()).setReadTimeout(0);
     }
 
     private Quote makeRESTReqForQuoteAsyncRT() {
@@ -121,15 +124,27 @@ public class SeedStarterMngController {
     @RequestMapping({"/resttemplatetest"})
     public ModelAndView handleRequest() {
         Quote quote = makeRESTReqForQuoteSyncRT();
-        Quote asyncQuote = makeRESTReqForQuoteAsyncRT();
+//        Quote asyncQuote = makeRESTReqForQuoteAsyncRT();
         logger.info("Return View: " + quote);
         ModelAndView mav = new ModelAndView("resttemplatetest.html");
         mav.addObject("springasync", makeRESTReqForGithubSpringAsync());
         mav.addObject("postres", makeRESTPOSTReq());
         mav.addObject("syncquotetype", quote.getType());
         mav.addObject("syncquoteval", quote.getValue().getQuote());
-        mav.addObject("asyncquotetype", asyncQuote.getType());
-        mav.addObject("asyncquoteval", asyncQuote.getValue().getQuote());
+        mav.addObject("reqfactory", restTemplate.getRequestFactory().toString());
+
+//        mav.addObject("asyncquotetype", asyncQuote.getType());
+//        mav.addObject("asyncquoteval", asyncQuote.getValue().getQuote());
+        return mav;
+    }
+
+    @RequestMapping({"/singleresttemplatetest"})
+    public ModelAndView handleSingleRequest() {
+        Quote quote = makeRESTReqForQuoteSyncRT();
+        logger.info("Return View: " + quote);
+        ModelAndView mav = new ModelAndView("resttemplatetest.html");
+        mav.addObject("syncquotetype", quote.getType());
+        mav.addObject("syncquoteval", quote.getValue().getQuote());
         return mav;
     }
 
@@ -142,5 +157,4 @@ public class SeedStarterMngController {
         mav.addObject("asyncquoteval", asyncQuote.getValue().getQuote());
         return mav;
     }
-
 }
